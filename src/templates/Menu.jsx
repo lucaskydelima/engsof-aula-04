@@ -1,21 +1,38 @@
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 
+import { Link } from "react-router-dom";
+import { useContextoLogin } from "../contexts/ContextLogin";
+
 export default function Menu() {
+  const { setDadosUsuario } = useContextoLogin();
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#home">Menu</Navbar.Brand>
+        <Navbar.Brand href="" as={Link} to={"/"}>
+          Home
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
             <NavDropdown title="Cadastro" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Carro</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Fornecedor</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Peças</NavDropdown.Item>
+              <NavDropdown.Item href="" as={Link} to={"/veiculo"}>
+                Veículo
+              </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">Cliente</NavDropdown.Item>
+              <NavDropdown.Item href="" as={Link} to={"/cliente"}>
+                Cliente
+              </NavDropdown.Item>
             </NavDropdown>
+          </Nav>
+          <Nav className="ms-auto">
+            <Nav.Link
+              onClick={() => {
+                setDadosUsuario({ usuario: "", logado: false });
+              }}
+            >
+              Logout
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

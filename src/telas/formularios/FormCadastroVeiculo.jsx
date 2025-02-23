@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Col, Form, Row, InputGroup } from "react-bootstrap";
+import { Button, Col, Form, Row, InputGroup, Container } from "react-bootstrap";
 
 export default function FormCadastroVeiculo() {
   const [validated, setValidated] = useState(false);
@@ -181,10 +181,10 @@ export default function FormCadastroVeiculo() {
           feedbackType="invalid"
         />
       </Form.Group>
-      <div className="d-flex gap-2">
+      <Container className="d-flex gap-2">
         <Button type="clear">Limpar</Button>
         <Button type="submit">Cadastrar</Button>
-      </div>
+      </Container>
     </Form>
   );
 }

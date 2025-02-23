@@ -8,7 +8,7 @@ export default function Pagina(props) {
     <Container>
       <Cabecalho titulo={props.titulo} />
       <Menu />
-      <div>{props.children}</div>
+      <Container>{props.children}</Container>
     </Container>
   );
 }
