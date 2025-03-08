@@ -7,9 +7,7 @@ import { useContextoLogin } from "../../contexts/ContextLogin";
 export default function FormLogin(props) {
   const usuario = useRef();
   const password = useRef();
-
-  const navigate = useNavigate();
-  const { dadosUsuario, setDadosUsuario } = useContextoLogin();
+  const { setDadosUsuario } = useContextoLogin();
 
   const verificaCredenciais = (event) => {
     if (
@@ -20,12 +18,9 @@ export default function FormLogin(props) {
         usuario: usuario.current.value,
         logado: true,
       });
-
-      navigate("/");
     } else {
       window.alert("Usuário e/ou senha inválidos!");
     }
-
     event.preventDefault();
     event.stopPropagation();
   };
@@ -40,11 +35,12 @@ export default function FormLogin(props) {
         <Form.Group className="mb-3">
           <Form.Label>Usuário</Form.Label>
           <Form.Control
-            type="username"
+            type="text"
             id="user"
             name="user"
             ref={usuario}
             placeholder="Digite o usuario"
+            autoComplete="username"
           />
         </Form.Group>
 
@@ -56,6 +52,7 @@ export default function FormLogin(props) {
             name="password"
             ref={password}
             placeholder="Password"
+            autoComplete="current-password"
           />
         </Form.Group>
 

@@ -1,27 +1,67 @@
 import { useState } from "react";
 import { Button, Col, Form, Row, InputGroup, Container } from "react-bootstrap";
 
-export default function FormCadastroVeiculo() {
-  const [validated, setValidated] = useState(false);
+import { fuelData } from "../../data/FuelData";
+import { brandData } from "../../data/BrandData";
+import { useContextoVeiculo } from "../../contexts/ContextVeiculo";
 
-  const [licentePlate, setLicensePlate] = useState("");
-  const [vehicleModel, setVehicleModel] = useState("");
-  const [vehicleBrand, setVehicleBrand] = useState("");
-  const [yearOfManufacture, setYearOfManufacture] = useState("");
-  const [vehicleColor, setVehicleColor] = useState("");
-  const [chassisNumber, setChassisNumber] = useState("");
-  const [renavamNumber, setRenavamNumber] = useState("");
-  const [fuelType, setFuelType] = useState("gasolina");
+export default function FormCadastroVeiculo(props) {
+  const [validated, setValidated] = useState(false);
+  const {
+    vehicleList,
+    setVehicleList,
+    vehicle,
+    setVehicle,
+    editedVehicle,
+    resetVehicle,
+  } = useContextoVeiculo();
 
   const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      // show validation feedback
-      setValidated(true);
-    }
-
     event.preventDefault();
     event.stopPropagation();
+    const form = event.currentTarget;
+
+    if (form.checkValidity() === false) {
+      setValidated(true);
+      return;
+    }
+
+    if (props.editMode) {
+      const index = vehicleList.findIndex(
+        (vehicle) => vehicle.licensePlate === editedVehicle.licensePlate
+      );
+      const data = vehicleList;
+      data[index] = vehicle;
+      setVehicleList(data);
+    } else {
+      setVehicleList([...vehicleList, vehicle]);
+    }
+    props.setViewMode(true);
+    props.setEditMode(false);
+    resetVehicle();
+  };
+
+  const updateVehicle = (event) => {
+    const data = { ...vehicle, [event.target.id]: event.target.value };
+    setVehicle(data);
+  };
+
+  const updateOptions = (event) => {
+    let id;
+    if (event.target.name === "fuelType") {
+      id = fuelData.find(
+        (fuelType) => fuelType.name === event.target.value
+      )?.id;
+    } else if (event.target.name === "vehicleBrand") {
+      id = brandData.find((brand) => brand.name === event.target.value)?.id;
+    }
+
+    const data = {
+      ...vehicle,
+      [event.target.name]: { id: id, name: event.target.value },
+    };
+
+    setVehicle(data);
   };
 
   return (
@@ -41,8 +81,8 @@ export default function FormCadastroVeiculo() {
             pattern="[a-zA-Z]{3}[0-9]{1}[a-zA-Z]{1}[0-9]{2}"
             placeholder="LLLNLNN"
             maxLength={7}
-            value={licentePlate}
-            onChange={(e) => setLicensePlate(e.target.value)}
+            value={vehicle.licensePlate}
+            onChange={updateVehicle}
             required
           />
           <Form.Control.Feedback type="invalid">
@@ -55,8 +95,8 @@ export default function FormCadastroVeiculo() {
             type="text"
             id="vehicleModel"
             name="vehicleModel"
-            value={vehicleModel}
-            onChange={(e) => setVehicleModel(e.target.value)}
+            value={vehicle.vehicleModel}
+            onChange={updateVehicle}
             required
           />
           <Form.Control.Feedback type="invalid">
@@ -66,14 +106,23 @@ export default function FormCadastroVeiculo() {
         <Form.Group as={Col} md="4">
           <Form.Label>Marca</Form.Label>
           <InputGroup hasValidation>
-            <Form.Control
+            <Form.Select
               type="text"
               id="vehicleBrand"
               name="vehicleBrand"
-              value={vehicleBrand}
-              onChange={(e) => setVehicleBrand(e.target.value)}
+              value={vehicle.vehicleBrand.name}
+              onChange={updateOptions}
               required
-            />
+            >
+              <option value="" disabled>
+                Selecione
+              </option>
+              {brandData?.map((brand) => (
+                <option key={brand.id} value={brand.name}>
+                  {brand.name}
+                </option>
+              ))}
+            </Form.Select>
             <Form.Control.Feedback type="invalid">
               Campo obrigatório.
             </Form.Control.Feedback>
@@ -89,11 +138,11 @@ export default function FormCadastroVeiculo() {
             name="yearOfManufacture"
             pattern="[0-9]{4}"
             maxLength={4}
-            value={yearOfManufacture}
+            value={vehicle.yearOfManufacture}
             onInput={(e) =>
               (e.target.value = e.target.value.replace(/\D/g, ""))
             }
-            onChange={(e) => setYearOfManufacture(e.target.value)}
+            onChange={updateVehicle}
             required
           />
           <Form.Control.Feedback type="invalid">
@@ -106,11 +155,11 @@ export default function FormCadastroVeiculo() {
             type="text"
             id="vehicleColor"
             name="vehicleColor"
-            value={vehicleColor}
+            value={vehicle.vehicleColor}
             onInput={(e) =>
               (e.target.value = e.target.value.replace(/[0-9]/, ""))
             }
-            onChange={(e) => setVehicleColor(e.target.value)}
+            onChange={updateVehicle}
             required
           />
           <Form.Control.Feedback type="invalid">
@@ -126,11 +175,11 @@ export default function FormCadastroVeiculo() {
             placeholder="00000000000"
             pattern="[0-9]{11}"
             maxLength={11}
-            value={chassisNumber}
+            value={vehicle.chassisNumber}
             onInput={(e) =>
               (e.target.value = e.target.value.replace(/\D/g, ""))
             }
-            onChange={(e) => setChassisNumber(e.target.value)}
+            onChange={updateVehicle}
             required
           />
           <Form.Control.Feedback type="invalid">
@@ -144,8 +193,8 @@ export default function FormCadastroVeiculo() {
             id="renavamNumber"
             name="renavamNumber"
             maxLength={15}
-            value={renavamNumber}
-            onChange={(e) => setRenavamNumber(e.target.value)}
+            value={vehicle.renavamNumber}
+            onChange={updateVehicle}
             required
           />
           <Form.Control.Feedback type="invalid">
@@ -160,30 +209,29 @@ export default function FormCadastroVeiculo() {
             id="fuelType"
             name="fuelType"
             required
-            value={fuelType}
-            onChange={(e) => setFuelType(e.target.value)}
+            value={vehicle.fuelType.name}
+            onChange={updateOptions}
           >
-            <option value="gasolina">Gasolina</option>
-            <option value="etanol">Etanol</option>
-            <option value="flex">Flex</option>
-            <option value="diesel">Diesel</option>
+            <option value="" disabled>
+              Selecione
+            </option>
+            {fuelData?.map((fuel) => (
+              <option key={fuel.id} value={fuel.name}>
+                {fuel.name}
+              </option>
+            ))}
           </Form.Select>
           <Form.Control.Feedback type="invalid">
             Campo Obrigatório.
           </Form.Control.Feedback>
         </Form.Group>
       </Row>
-      <Form.Group className="mb-3">
-        <Form.Check
-          required
-          label="Concordo com os termos e condições"
-          feedback="Você deve concordar antes de enviar."
-          feedbackType="invalid"
-        />
-      </Form.Group>
-      <Container className="d-flex gap-2">
-        <Button type="clear">Limpar</Button>
-        <Button type="submit">Cadastrar</Button>
+
+      <Container className="d-flex gap-2 mt-4">
+        <Button type="button" onClick={() => props.setViewMode(true)}>
+          Voltar
+        </Button>
+        <Button type="submit">{props.editMode ? "Atualizar" : "Salvar"}</Button>
       </Container>
     </Form>
   );

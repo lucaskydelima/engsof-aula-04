@@ -8,7 +8,7 @@ import TelaHome from "./telas/TelaHome";
 import { useContextoLogin } from "./contexts/ContextLogin";
 
 function App() {
-  const { dadosUsuario, setDadosUsuario } = useContextoLogin();
+  const { dadosUsuario } = useContextoLogin();
 
   return (
     <div className="App">
@@ -19,6 +19,7 @@ function App() {
               <Route path="/" element={<TelaHome />} />
               <Route path="/veiculo" element={<TelaCadastroVeiculo />} />
               <Route path="/cliente" element={<TelaCadastroCliente />} />
+              <Route path="/login" element={<Navigate to={"/"} replace />} />
             </>
           ) : (
             <>
