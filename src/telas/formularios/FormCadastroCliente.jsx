@@ -96,7 +96,7 @@ export default function FormCadastroCliente(props) {
             maxLength={14}
             value={cpfNumber}
             onInput={(e) =>
-              (e.target.value = e.target.value.replace(/[^0-9\.-]/g, ""))
+              (e.target.value = e.target.value.replace(/[^0-9.-]/g, ""))
             }
             onChange={(e) => setCpfNumber(e.target.value)}
             required
@@ -114,7 +114,7 @@ export default function FormCadastroCliente(props) {
             maxLength={14}
             value={rgNumber}
             onInput={(e) =>
-              (e.target.value = e.target.value.replace(/[^0-9\.-]/g, ""))
+              (e.target.value = e.target.value.replace(/[^0-9.-]/g, ""))
             }
             onChange={(e) => setRgNumber(e.target.value)}
             required

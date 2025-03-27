@@ -1,22 +1,20 @@
 import { createContext, useContext, useState } from "react";
 
-import { vehicleData } from "../data/VehicleData";
-
 const VeiculoContexto = createContext();
 
 export const ContextoVeiculoProvider = ({ children }) => {
   const initialState = {
-    licensePlate: "",
-    vehicleModel: "",
-    vehicleBrand: { id: 0, name: "" },
-    yearOfManufacture: "",
-    vehicleColor: "",
-    chassisNumber: "",
-    renavamNumber: "",
-    fuelType: { id: 0, name: "" },
+    plate: "",
+    model: "",
+    brand: { id: 0, name: "" },
+    yearOf: "",
+    color: "",
+    chassis: "",
+    renavam: "",
+    fuel: { id: 0, name: "" },
   };
 
-  const [vehicleList, setVehicleList] = useState(vehicleData);
+  const [vehicleList, setVehicleList] = useState([]);
   const [vehicle, setVehicle] = useState(initialState);
   const [editedVehicle, setEditedVehicle] = useState(initialState);
 

@@ -128,7 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-<<<<<<< HEAD
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -152,5 +151,3 @@ dist
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-=======
->>>>>>> a3bd6e9512bc401c8fa947ac3d209142dd14f84d
